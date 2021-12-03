@@ -1,0 +1,26 @@
+{% extends 'Attendance/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+        
+<div class="alert alert-info">
+  <strong><h2>{{ legend }}</h2></strong> 
+</div>
+
+
+ <form action="" method="POST"><div>
+   {% csrf_token %}
+{{ form.as_p }}
+
+
+<input type="Submit" value="Submit"> 
+</form>
+
+
+ </div>
+
+</div>
+  
+{% endblock %}
