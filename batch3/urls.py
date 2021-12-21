@@ -18,6 +18,8 @@ from django.urls import path, include
 from Attendance import views as att_views
 from django.contrib.auth import views as auth_views
 from user_app.views import Profile, loginPage
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -30,6 +32,7 @@ urlpatterns = [
     path('profile/',Profile , name='profile'),
 
     path('logout/', auth_views.LogoutView.as_view(template_name='user_app/logout.html'), name='Logout'),
+    path('user/', include('user_app.urls')),
     
-
 ]
+urlpatterns = urlpatterns+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
