@@ -12,6 +12,11 @@ from django.contrib.auth.models import User
 def Profile(request):
 	return render(request,'user_app/profile.html')
 
+def Profile_user(request,id1):
+	u1 = User.objects.filter(id=id1)[0]
+	context = {'user1':u1}
+	return render(request,'user_app/profile_user.html', context)
+
 def loginPage(request):
 	form = AuthenticationForm()
 	context = {'form': form,'legend' : 'Login Now' }

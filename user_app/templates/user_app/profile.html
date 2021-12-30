@@ -18,6 +18,8 @@
   <div class="media">
     <img src="{{ user.profile.image.url }}"  class="img-circle" width="200px" height="200px">
 <h3>{{ user.email }}</h3>
+
+<h2> <a href="{%url 'user-post-all' %}"> MY Posts  </a>
 </div>
 
 <a href="{% url 'UpdateProfile' %}"><b> Update Profile </b></a>

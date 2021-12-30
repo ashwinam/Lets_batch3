@@ -16,7 +16,7 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{ user.username }}</a>
+      <a class="navbar-brand" href="{% url 'profile' %}">{{ user.username }}</a>
     </div>
     <ul class="nav navbar-nav">
 
@@ -26,6 +26,11 @@
       <li><a href="{% url 'masterdetails' %}">Master Details</a></li>
       <li><a href="{% url 'markatt' %}">Mark Att</a></li>
       <li><a href="{% url 'disatt' %}">All Att</a></li>
+      <li><a href="{% url 'post-create' %}">Create POST</a></li>
+      <li><a href="{% url 'post-all' %}">All Post</a></li>
+   
+      
+
     </ul>
     <ul class="nav navbar-nav navbar-right">
        <li><a href="{% url 'Logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>

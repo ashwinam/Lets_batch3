@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Attendance.apps.AttendanceConfig',
     'user_app.apps.UserAppConfig',
-    'crispy_forms'
+    'crispy_forms',
+    'blog.apps.BlogConfig'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +154,11 @@ LOGIN_REDIRECT_URL = 'profile'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True 
+EMAIL_HOST_USER = 'greatextreme'
+EMAIL_HOST_PASSWORD =''

@@ -4,6 +4,7 @@ from .models import Student,Mark_Attendance, MasterData
 from .forms import StudentForm,StudentForm1, MasterForm,MarkAttednaceForm, OneStudentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .decorators import allowed_user
 
 import time 
 
@@ -74,52 +75,97 @@ def student_form_data_model(request):
 	return render(request,'Attendance/displayforms.html', context)
 
 # Create your views here.
-def master_Data(request):
-	form = MasterForm()
-	context = {'form': form, 'legend': "Enter the Details "}
+'''
+@login_required(login_url='Login')
+def master_Data(request):     # writeable 
+	if request.user.groups.exists():
+		if request.user.groups.all()[0].name=='grp_write':
+			form = MasterForm()
+			context = {'form': form, 'legend': "Enter the Details "}
 
-	if request.method=='POST':
-		form = MasterForm(request.POST)
-		if form.is_valid():
-				try :
-				
-					form.save()
-					name = form.cleaned_data['stuname']
-					messages.success(request,f"Record added {name}")
-				except Exception as e :
-					messages.warning(request,f"{e}")
-		else:
-			print (type(form.errors))
-			messages.warning(request,f"{form.errors}", )
+			if request.method=='POST':
+				form = MasterForm(request.POST)
+				if form.is_valid():
+						try :
+						
+							form.save()
+							name = form.cleaned_data['stuname']
+							messages.success(request,f"Record added {name}")
+						except Exception as e :
+							messages.warning(request,f"{e}")
+				else:
+					print (type(form.errors))
+					messages.warning(request,f"{form.errors}", )
 
-	return render(request, 'Attendance/displayforms.html', context)
+			return render(request, 'Attendance/displayforms.html', context)
+		else :
+			return HttpResponse("<h1>You are not Authorized</h1>")
+	else :
+		return HttpResponse("<h1>You are not Authorized</h1>")
+'''
+@login_required(login_url='Login')
+@allowed_user(allowed_roles=['grp_write'])
+def master_Data(request):     # writeable 
+			form = MasterForm()
+			context = {'form': form, 'legend': "Enter the Details "}
+
+			if request.method=='POST':
+				form = MasterForm(request.POST)
+				if form.is_valid():
+						try :
+						
+							form.save()
+							name = form.cleaned_data['stuname']
+							messages.success(request,f"Record added {name}")
+						except Exception as e :
+							messages.warning(request,f"{e}")
+				else:
+					print (type(form.errors))
+					messages.warning(request,f"{form.errors}", )
+
+			return render(request, 'Attendance/displayforms.html', context)
 
 def e_h(t1):
 	t9 = time.localtime(t1)
 	return time.strftime("%d-%m-%Y-%H", t9)
 
 def Mark_Att(request):
-	form = MarkAttednaceForm()
-	context = {'form': form, 'legend': "Mark Your Attendance"}
-	if request.method=='POST':
-		form = MarkAttednaceForm(request.POST)
-		if form.is_valid():
-			mark1 = form.save(commit=False)
-			mark1.time1 = int(time.time())
-			mark1.ip_address = request.META.get('REMOTE_ADDR')
-			mark1.platform = request.META.get('HTTP_USER_AGENT')
-			mark1.date1 = e_h(mark1.time1)
-			form.save()
-			messages.success(request,f"Attedance Marked")
-			print ("OKKKK")
+			form = MarkAttednaceForm()
+			context = {'form': form, 'legend': "Mark Your Attendance"}
+			if request.method=='POST':
+				form = MarkAttednaceForm(request.POST)
+				if form.is_valid():
+					mark1 = form.save(commit=False)
+					mark1.time1 = int(time.time())
+					mark1.ip_address = request.META.get('REMOTE_ADDR')
+					mark1.platform = request.META.get('HTTP_USER_AGENT')
+					mark1.date1 = e_h(mark1.time1)
+					form.save()
+					messages.success(request,f"Attedance Marked")
+					print ("OKKKK")
 
 
-	return render(request,'Attendance/displayforms.html', context)
-
+			return render(request,'Attendance/displayforms.html', context)
+'''
 def display_attendance(request):
-	posts = Mark_Attendance.objects.all()
-	context = {'data' : posts}
-	return render(request, 'Attendance/displayatt.html', context )
+	if request.user.groups.exists():
+		allowed_roles = ['grp1_read', 'grp_write']
+		n_g = request.user.groups.all()[0].name
+		if n_g in allowed_roles:
+			posts = Mark_Attendance.objects.all()
+			context = {'data' : posts}
+			return render(request, 'Attendance/displayatt.html', context )
+		else :
+			return HttpResponse("<h1>You are not Authorized</h1>")
+	else :
+		return HttpResponse("<h1>You are not Authorized</h1>")
+'''
+@allowed_user(allowed_roles=['grp_write','grp1_read'])
+def display_attendance(request):
+			posts = Mark_Attendance.objects.all()
+			context = {'data' : posts}
+			return render(request, 'Attendance/displayatt.html', context )
+
 
 @login_required(login_url='Login')
 def Mark_Att(request):

@@ -13,13 +13,13 @@
 
  <form action="" method="POST"><div>
    {% csrf_token %}
-{{ form.as_p }}
 
+<h1> Delete Post </h1>
+<h2> Do you really want to delete "{{ object.title }}"
 
-<input type="Submit" value="Submit"> 
+<button type="Submit" class ="btn btn-danger"> Yes Delete </button> 
 </form>
-<br>
-<a href="{%url 'password_reset' %}"> Recover Password </a>
+
 
  </div>
 
